@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=anv, initial-scale=1.0" />
+    <title>Forum</title>
+
+
+    <link rel="stylesheet" href="../../style/style.css" />
+
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <style>
+        .pagination,
+        .pagination li a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .pagination li {
+            background: #f23b26;
+            list-style: none;
+        }
+
+        .pagination li a {
+            text-decoration: none;
+            color: #fdfdfd;
+            height: 50px;
+            width: 50px;
+            font-size: 18px;
+            padding-top: 1px;
+            border: 1px solid rgba(0, 0, 0, 0.25);
+            border-right-width: 0px;
+            box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.35);
+        }
+
+        .pagination li:last-child a {
+            border-right-width: 1px;
+        }
+
+        .pagination li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-top-color: rgba(0, 0, 0, 0.35);
+            border-bottom-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .pagination li a:focus,
+        .pagination li a:active {
+            padding-top: 4px;
+            border-left-width: 1px;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: inset 0px 2px 1px 0px rgba(0, 0, 0, 0.25);
+        }
+
+        .pagination li.icon a {
+            min-width: 120px;
+        }
+
+        .pagination li:first-child span {
+            padding-right: 8px;
+        }
+
+        .pagination li:last-child span {
+            padding-left: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="menu">
+            <div class="logo">
+                <a href="/">Web Forum</a>
+            </div>
+            <%- include('../layouts/menu', {ses : session}) %>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!---------------------------------Line Between Thread------------------------------------------------------------------------->
+        <!--Start of Thread-->
+        <div class="subforum">
+            <div class="subforum-title">
+                <h1>Kategori: <a href="#">
+                        <%= category_thread.title %>
+                    </a></h1>
+            </div>
+            <% thread_list.forEach(function(item, index) { %>
+                <div class="subforum-row">
+                    <!--^Start of Post^-->
+                    <!--Sort what number post are-->
+                    <div class="subforum-number subforum-column center">
+                        <%= index+1 %>
+                    </div>
+                    <div class="subforum-description subforum-column">
+                        <!--Link for the post to be click-->
+                        <h1>
+                            <a href="/forum/detail/<%= item.id %>">
+                                <%= item.title %>
+                            </a>
+                        </h1>
+                        <!--Description that User input-->
+                        <p>
+                            <%= strip_html(item.content).result.slice(0, 100)+'...' %>
+                        </p>
+                    </div>
+                    <div class="subforum-stats subforum-column center">
+                        <!-- Number of comments-->
+                        <span>
+                            <%= item.jumlah %> Replies<br>
+                                <%= item.react_like_count %> Likes
+                        </span>
+                    </div>
+                    <div class="subforum-info subforum-column">
+                        <!--What date of the post and wich User Posted-->
+                        <b><a href="#">Last Posted</a> By <a href="#">
+                                <%= item.name %>
+                            </a></b>
+                        <br />
+                        on <small>
+                            <%= item.thread_created_at %>
+                        </small>
+                    </div>
+                </div>
+                <% }); %>
+                    <!-- ^End of the line post^-->
+                    <!--This is the for between Post -->
+        </div>
+        <!--This is the end of Thread-->
+        <!---------------------------------Line Between Thread------------------------------------------------------------------------->
+
+        <ul class="pagination">
+            <li class="icon">
+                <a href="#"><i data-feather="arrow-left-circle" style="margin-right: 5px;"></i> Previous</a>
+            </li>
+            <li class="icon">
+                <a href="#">Next <i data-feather="arrow-right-circle" style="margin-left: 5px;"></i></a>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        feather.replace();
+    </script>
+
+    <%- include('../layouts/pusher', {ses : session}) %>
+
+</body>
+
+</html>

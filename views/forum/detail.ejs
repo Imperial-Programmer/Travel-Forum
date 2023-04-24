@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=anv, initial-scale=1.0" />
+    <title>
+        <%= thread_detail.title %>
+    </title>
+
+
+    <%- include('../layouts/vendor_css') %>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote.min.css"
+            integrity="sha512-m52YCZLrqQpQ+k+84rmWjrrkXAUrpl3HK0IO4/naRwp58pyr7rf5PO1DbI2/aFYwyeIH/8teS9HbLxVyGqDv/A=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <style>
+            nav {
+                background: rgb(33, 33, 33);
+                width: 100%;
+                padding: 10px 0;
+            }
+
+            nav .menu {
+                max-width: 1250px;
+
+                margin: auto;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 20px;
+            }
+
+            .menu .logo a {
+                text-decoration: none;
+                color: white;
+                font-size: 25px;
+                font-weight: 600;
+                padding: 8px 15px;
+                border-radius: 5px;
+                transition: all 0.3s ease;
+            }
+
+            .menu .logo a:hover {
+                background: orange;
+                color: black;
+            }
+
+            .menu ul {
+                display: inline-flex;
+            }
+
+            .menu ul li {
+                list-style: none;
+                margin-left: 7px;
+            }
+
+            .menu ul li a {
+                text-decoration: none;
+                color: white;
+                font-size: 18px;
+                font-weight: 500;
+
+                padding: 8px 15px;
+                border-radius: 5px;
+                transition: all 0.3s ease;
+            }
+
+            .menu ul li a:hover {
+                background: orange;
+                color: black;
+            }
+
+            #container-box {
+                padding: 20px;
+            }
+
+            .form-col,
+            .topic-col {
+                min-width: 16em;
+            }
+
+            .last-post-col,
+            .created-col,
+            .author-col {
+                min-width: 12em;
+            }
+
+            .post-col {
+                min-width: 20em;
+            }
+
+            .feather-16 {
+                width: 16px;
+                height: 16px;
+            }
+
+            .feather-24 {
+                width: 24px;
+                height: 24px;
+            }
+
+            .feather-32 {
+                width: 32px;
+                height: 32px;
+            }
+        </style>
+
+
+</head>
+
+<body>
+    <nav>
+        <div class="menu">
+            <div class="logo">
+                <a href="/">Web Forum</a>
+            </div>
+            <%- include('../layouts/menu', {ses : session}) %>
+        </div>
+    </nav>
+
+    <div class="container" id="container-box">
+        <div class="row mb-3">
+            <div class="col-12">
+                <div style="text-align: right">
+                    <a class="btn btn-primary" href="/forum/create">Buat Thread Baru</a>
+                    <a class="btn btn-info" href="/forum/my-thread">Thread Saya</a>
+                </div>
+            </div>
+        </div>
+        <% if (msgSuccess !=null && msgSuccess !='' ) { %>
+            <div class="alert alert-success" role="alert">
+                <%= msgSuccess %>
+            </div>
+            <% } %>
+
+                <% if (msgError !=null && msgError !='' ) { %>
+                    <div class="alert alert-danger" role="alert">
+                        <%= msgError %>
+                    </div>
+                    <% } %>
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="h4 text-white bg-info mb-0 p-4 rounded-top">
+                                    <%= thread_detail.title %>
+                                </h2>
+                                <table class="table table-stripped table-bordered table-responsive-lg">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Author</th>
+                                            <th scope="col">Thread</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="author-col">
+                                                <div>by <a href="#">
+                                                        <%= thread_detail.name %>
+                                                    </a></div>
+                                            </td>
+                                            <td class="post-col d-lg-flex justify-content-lg-between">
+                                                <div></div>
+                                                <div><span class="font-weight-bold">Waktu Publikasi: </span>
+                                                    <%= new Intl.DateTimeFormat('id',{ day: '2-digit' , month: 'long' ,
+                                                        year: 'numeric' , hour: 'numeric' , minute: 'numeric'
+                                                        }).format(thread_detail.created_at) %> <br>
+                                                        <span class="font-weight-bold">Budget:
+                                                        </span> Rp <%= thread_detail.budget_min.toLocaleString('id-Id')
+                                                            %> -
+                                                            <%= thread_detail.budget_max.toLocaleString('id-Id') %>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="post-col d-lg-flex justify-content-lg-between">
+                                                <div><span class="font-weight-bold">Bergabung:</span><br>
+                                                    <%= new Intl.DateTimeFormat('en-GB', { year: 'numeric' ,
+                                                        month: 'long' , day: '2-digit'
+                                                        }).format(thread_detail.joined_at) %><br>
+                                                        <%= thread_detail.react_like_count %> <i class="feather-12"
+                                                                data-feather="thumbs-up"></i>
+                                                            <%= thread_detail.react_dislike_count %> <i
+                                                                    class="feather-12" data-feather="thumbs-down"></i>
+                                                </div>
+                                                <div>
+                                                    <button class="btn btn-success btn-sm btn-react btn-like"
+                                                        data-status="1" data-thread="<%= thread_detail.id %>"
+                                                        title="Sukai Thread Ini"><i class="feather-16"
+                                                            data-feather="thumbs-up"></i></button>
+                                                    <button class="btn btn-danger btn-sm btn-react btn-dislike"
+                                                        data-status="0" data-thread="<%= thread_detail.id %>"
+                                                        title="Tidak Menyukai Thread Ini"><i class="feather-16"
+                                                            data-feather="thumbs-down"></i></button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <%- thread_detail.content %>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table class="table table-stripped table-bordered table-responsive-lg">
+                                    <tbody>
+                                        <% reply_list.forEach(function(item, index) { %>
+                                            <tr>
+                                                <td class="author-col">
+                                                    <div>by <a href="#">
+                                                            <%= item.name %>
+                                                        </a></div>
+                                                </td>
+                                                <td class="post-col d-lg-flex justify-content-lg-between">
+                                                    <div></div>
+                                                    <div><span class="font-weight-bold">Waktu Publikasi: </span>
+                                                        <%= item.thread_reply_created_at %>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="post-col d-lg-flex justify-content-lg-between">
+                                                    <div><span class="font-weight-bold">Bergabung:</span><br>
+                                                        <%= item.joined_at %><br>
+                                                            <%= item.react_like_count %> <i class="feather-12"
+                                                                    data-feather="thumbs-up"></i>
+                                                                <%= item.react_dislike_count %> <i class="feather-12"
+                                                                        data-feather="thumbs-down"></i>
+                                                    </div>
+                                                    <div>
+                                                        <button class="btn btn-success btn-sm btn-react-reply btn-like"
+                                                            title="Sukai Balasan Thread Ini" data-status="1"
+                                                            data-thread-reply="<%= item.id %>"><i class="feather-16"
+                                                                data-feather="thumbs-up"></i></button>
+                                                        <button
+                                                            class="btn btn-danger btn-sm btn-react-reply btn-dislike"
+                                                            title="Tidak Menyukai Balasan Thread Ini" data-status="0"
+                                                            data-thread-reply="<%= item.id %>"><i class="feather-16"
+                                                                data-feather="thumbs-down"></i></button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <%- item.content %>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <form class="mb-3" method="POST" action="/forum/reply">
+                            <input type="hidden" name="thread_id" value="<%= thread_detail.id %>">
+                            <div class="form-group">
+                                <label for="comment">Balas Thread ini: </label>
+                                <textarea class="form-control" id="comment" name="content" required></textarea>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Balas</button>
+                        </form>
+    </div>
+    </div>
+
+
+
+    <%- include('../layouts/vendor_js') %>
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote.min.js"
+            integrity="sha512-6rE6Bx6fCBpRXG/FWpQmvguMWDLWMQjPycXMr35Zx/HRD9nwySZswkkLksgyQcvrpYMx0FELLJVBvWFtubZhDQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <script src="https://unpkg.com/feather-icons"></script>
+        <script>
+            feather.replace()
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#comment').summernote({
+                    height: 200
+                });
+
+                $('.btn-react').click(function () {
+                    let id = $(this).data('thread');
+                    let status = $(this).data('status');
+
+                    $.get(`/forum/react/${id}/${status}`, function (data, stat) {
+
+                    });
+
+                    if (status == '1') {
+                        $(this).closest('div').find('.btn-dislike').toggle();
+                    } else if (status == '0') {
+                        $(this).closest('div').find('.btn-like').toggle();
+                    }
+                });
+
+                $('.btn-react-reply').click(function () {
+                    let id = $(this).data('thread-reply');
+                    let status = $(this).data('status');
+
+                    $.get(`/forum/reply-react/${id}/${status}`, function (data, stat) {
+
+                    });
+
+                    if (status == '1') {
+                        $(this).closest('div').find('.btn-dislike').toggle();
+                    } else if (status == 0) {
+                        $(this).closest('div').find('.btn-like').toggle();
+                    }
+                });
+            });
+        </script>
+
+        <%- include('../layouts/pusher', {ses : session}) %>
+
+</body>
+
+</html>

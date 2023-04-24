@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Tour By Budget &mdash; Travel Forum</title>
+
+    <%- include('../../layouts/backend/vendor_css') %>
+
+        <%- include('../../layouts/backend/datatable_css') %>
+</head>
+
+<body>
+    <div id="app">
+        <div class="main-wrapper main-wrapper-1">
+
+            <%- include('../../layouts/backend/navbar') %>
+
+                <%- include('../../layouts/backend/sidebar') %>
+
+                    <!-- Main Content -->
+                    <div class="main-content">
+                        <section class="section">
+                            <div class="section-header">
+                                <h1>Daftar Tour By Budget</h1>
+                            </div>
+
+                            <div class="section-body">
+
+                                <div class="row mb-2">
+                                    <div class="col-12 text-right">
+                                        <a href="/admin/tour-by-budget/create" class="btn btn-primary"><i
+                                                class="fas fa-plus"></i> Tambah Data</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped" id="table-datatable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Judul</th>
+                                                                <th>Deskripsi Singkat</th>
+                                                                <th>Budget</th>
+                                                                <th>Aksi</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            <% tour_by_budget_list.forEach(function(item, index) { %>
+                                                                <tr>
+                                                                    <td>
+                                                                        <%= item.title %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= item.description %>
+                                                                    </td>
+                                                                    <td>
+                                                                        Min : <%= item.budget_min %><br>
+                                                                            Max : <%= item.budget_max %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="/admin/tour-by-budget/edit/<%= item.id %>"
+                                                                            class="btn btn-warning btn-sm"><i
+                                                                                class="fas fa-edit"></i> Ubah</a>
+                                                                        <a href="/admin/tour-by-budget/delete/<%= item.id %>"
+                                                                            class="btn btn-danger btn-sm"
+                                                                            onclick="return confirm('Anda yakin ingin menghapus data ini?')"><i
+                                                                                class="fas fa-trash"></i> Hapus</a>
+                                                                    </td>
+                                                                </tr>
+
+                                                                <% }) %>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <%- include('../../layouts/backend/footer') %>
+
+        </div>
+    </div>
+
+    <%- include('../../layouts/backend/vendor_js') %>
+
+        <%- include('../../layouts/backend/datatable_js') %>
+
+            <script>
+                $('#table-datatable').dataTable();
+            </script>
+</body>
+
+</html>
