@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=anv, initial-scale=1.0" />
+    <title>
+        Buat Thread Baru
+    </title>
+
+
+    <%- include('../layouts/vendor_css') %>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote.min.css"
+            integrity="sha512-m52YCZLrqQpQ+k+84rmWjrrkXAUrpl3HK0IO4/naRwp58pyr7rf5PO1DbI2/aFYwyeIH/8teS9HbLxVyGqDv/A=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <style>
+            nav {
+                background: rgb(33, 33, 33);
+                width: 100%;
+                padding: 10px 0;
+            }
+
+            nav .menu {
+                max-width: 1250px;
+
+                margin: auto;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 20px;
+            }
+
+            .menu .logo a {
+                text-decoration: none;
+                color: white;
+                font-size: 25px;
+                font-weight: 600;
+                padding: 8px 15px;
+                border-radius: 5px;
+                transition: all 0.3s ease;
+            }
+
+            .menu .logo a:hover {
+                background: orange;
+                color: black;
+            }
+
+            .menu ul {
+                display: inline-flex;
+            }
+
+            .menu ul li {
+                list-style: none;
+                margin-left: 7px;
+            }
+
+            .menu ul li a {
+                text-decoration: none;
+                color: white;
+                font-size: 18px;
+                font-weight: 500;
+
+                padding: 8px 15px;
+                border-radius: 5px;
+                transition: all 0.3s ease;
+            }
+
+            .menu ul li a:hover {
+                background: orange;
+                color: black;
+            }
+
+            #container-box {
+                padding: 20px;
+            }
+
+            .form-col,
+            .topic-col {
+                min-width: 16em;
+            }
+
+            .last-post-col,
+            .created-col,
+            .author-col {
+                min-width: 12em;
+            }
+
+            .post-col {
+                min-width: 20em;
+            }
+        </style>
+
+
+</head>
+
+<body>
+    <nav>
+        <div class="menu">
+            <div class="logo">
+                <a href="/">Web Forum</a>
+            </div>
+            <%- include('../layouts/menu', {ses : session}) %>
+        </div>
+    </nav>
+
+    <div class="container" id="container-box">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="h4 text-white bg-info mb-3 p-4 rounded">Buat Thread Baru</h2>
+                <form class="mb-3" action="/forum/save-thread" method="POST">
+                    <div class="form-group">
+                        <label for="topic">Judul Thread</label>
+                        <input type="text" class="form-control" id="topic" placeholder="Masukkan judul thread"
+                            name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Kategori Thread</label>
+                        <select class="form-control" name="category_id" required>
+                            <% category_list.forEach(function(item, index) { %>
+                                <option value="<%= item.id %>">
+                                    <%= item.title %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Kategori Budget</label>
+                        <select class="form-control" name="tour_by_budget_id" required>
+                            <% budget_category_list.forEach(function(item, index) { %>
+                                <option value="<%= item.id %>">
+                                    <%= item.title %> (Rp <%= item.budget_min.toLocaleString('id-Id') %> - <%=
+                                                item.budget_max.toLocaleString('id-Id') %>)
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="summernote">Isi Thread</label>
+                        <textarea class="form-control" id="summernote" name="content" required></textarea>
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Publikasikan Thread</button>
+                    <button class="btn btn-danger" type="reset">Reset</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../layouts/vendor_js') %>
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote.min.js"
+            integrity="sha512-6rE6Bx6fCBpRXG/FWpQmvguMWDLWMQjPycXMr35Zx/HRD9nwySZswkkLksgyQcvrpYMx0FELLJVBvWFtubZhDQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <script src="https://unpkg.com/feather-icons"></script>
+        <script>
+            feather.replace()
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#summernote').summernote({
+                    height: 200
+                });
+            });
+        </script>
+
+        <%- include('../layouts/pusher', {ses : session}) %>
+</body>
+
+</html>

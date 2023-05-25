@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Guide Tour &mdash; Travel Forum</title>
+
+    <%- include('../../layouts/backend/vendor_css') %>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote.min.css"
+            integrity="sha512-m52YCZLrqQpQ+k+84rmWjrrkXAUrpl3HK0IO4/naRwp58pyr7rf5PO1DbI2/aFYwyeIH/8teS9HbLxVyGqDv/A=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+        <link rel="stylesheet" href="/backend/assets/modules/select2/dist/css/select2.min.css">
+</head>
+
+<body>
+    <div id="app">
+        <div class="main-wrapper main-wrapper-1">
+
+            <%- include('../../layouts/backend/navbar') %>
+
+                <%- include('../../layouts/backend/sidebar') %>
+
+                    <!-- Main Content -->
+                    <div class="main-content">
+                        <section class="section">
+                            <div class="section-header">
+                                <h1>Edit Guide Tour</h1>
+                            </div>
+
+                            <div class="section-body">
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <form action="/admin/guide-tour/update/<%= result.id %>" method="POST">
+                                                <div class="card-body">
+                                                    <div class="row mb-2">
+                                                        <div class="form-group col-sm-6">
+                                                            <label>Lokasi</label>
+                                                            <input type="text" class="form-control" name="location"
+                                                                required value="<%= result.location %>">
+                                                        </div>
+                                                        <div class="form-group col-sm-6">
+                                                            <label>Kota</label>
+                                                            <select name="city_id"
+                                                                class="form-control form-select select2">
+                                                                <% city_list.forEach(function(item, index) { %>
+                                                                    <option value="<%= item.id %>" <% if
+                                                                        (item.id==result.city_id) { %> selected <% } %>>
+                                                                            <%= item.name %>
+                                                                    </option>
+                                                                    <% }) %>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-2">
+                                                        <div class="form-group col-sm-4">
+                                                            <label>Budget Min:</label>
+                                                            <input type="number" class="form-control" name="budget_min"
+                                                                value="<%= result.budget_min %>" min="0" required>
+                                                        </div>
+                                                        <div class="form-group col-sm-4">
+                                                            <label>Budget Max:</label>
+                                                            <input type="number" class="form-control" name="budget_max"
+                                                                value="<%= result.budget_max %>" min="0" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-2">
+                                                        <div class="form-group col-sm-12">
+                                                            <label>Guide:</label>
+                                                            <textarea type="text" class="form-control" name="content"
+                                                                required
+                                                                id="summernote"><%= result.content %></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <button class="btn btn-primary mr-1" type="submit">Simpan</button>
+                                                    <a class="btn btn-danger" href="/admin/guide-tour">Kembali</a>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <%- include('../../layouts/backend/footer') %>
+
+        </div>
+    </div>
+
+    <%- include('../../layouts/backend/vendor_js') %>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote.min.js"
+            integrity="sha512-6rE6Bx6fCBpRXG/FWpQmvguMWDLWMQjPycXMr35Zx/HRD9nwySZswkkLksgyQcvrpYMx0FELLJVBvWFtubZhDQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <script src="/backend/assets/modules/select2/dist/js/select2.full.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('#summernote').summernote({
+                    height: 300
+                });
+
+                $(".select2").select2();
+            });
+        </script>
+</body>
+
+</html>
